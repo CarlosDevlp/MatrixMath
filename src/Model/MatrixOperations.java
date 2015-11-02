@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Clase con funciones que permiten operación entre matrices
  */
 package Model;
 
@@ -13,23 +11,24 @@ import java.util.ArrayList;
  */
 abstract public class MatrixOperations {
     //crear una matriz
-    public static ArrayList< ArrayList<Integer> > parseToMatrix(String plainText){
+    public static ArrayList< ArrayList<Integer> > parseToMatrix(String plainText) throws Exception{
         ArrayList< ArrayList<Integer> > matrix=new ArrayList();
         String[] rows;
-        
-        if(plainText.charAt(0)=='[' && plainText.charAt(plainText.length()-1)==']'){
-           plainText=plainText.replace('[','0');
-           plainText=plainText.split("]")[0];
-        }
+        try{            
+            if(plainText.charAt(0)=='[' && plainText.charAt(plainText.length()-1)==']')
+               plainText=plainText.substring(1,plainText.length()-1);       
 
-        //crear una matriz con la sentencia introducida
-        rows=plainText.split(";");
-        
-        for(String row:rows){
-            matrix.add(new ArrayList<Integer>());
-                for(String col: row.split(","))
-                    matrix.get(matrix.size()-1).add(Integer.parseInt(col));
-        }                        
+            //crear una matriz con la sentencia introducida
+            rows=plainText.split(";");
+
+            for(String row:rows){
+                matrix.add(new ArrayList<Integer>());
+                    for(String col: row.split(","))
+                        matrix.get(matrix.size()-1).add(Integer.parseInt(col));
+            }            
+       }catch(Exception err){
+         throw new Exception("Matrix Maker, Error de Sintaxis."); 
+       }
        return matrix;
     }
     //Función para multiplicar matrices

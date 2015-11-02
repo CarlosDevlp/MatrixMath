@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author carlos
  */
 abstract public class MatrixTypes {
-    public static boolean debug=false;
+    private static boolean debug=false;
     //Función para hallar la inversa de una matriz
     public static ArrayList< ArrayList<Double> >  inverse(ArrayList< ArrayList<Integer> > matrix) throws Exception{
         ArrayList< ArrayList<Double> >  inv=new ArrayList();
@@ -70,6 +70,8 @@ abstract public class MatrixTypes {
         
         //debug
         if(debug){
+         System.out.println("---Inversa de la matriz---\n");
+         System.out.println("Determinante: "+det);
          System.out.println("Transpuesta: "+trans);
          System.out.println("Adjunta: "+adj);
         }
@@ -80,7 +82,7 @@ abstract public class MatrixTypes {
     public static boolean isDebug() {
         return debug;
     }
-    public static void setDebug(boolean debug) {
-        SystemEquations.debug = debug;
+    public static void setDebug(boolean debugx) {
+        debug = debugx;
     }
 }

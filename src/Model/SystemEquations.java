@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author carlos
  */
 abstract public class SystemEquations {
-       public static boolean debug=false;
+       private static boolean debug=false;
        private static DecimalFormat df = new DecimalFormat("#.####");
        public static abstract class Iterations{//alternativa a enum
            public static final int DEPENDSOFERROR=-1,ONCE=1,TWICE=2;           
@@ -56,7 +56,7 @@ abstract public class SystemEquations {
                  ncol++;
             }                                    
             nrow++;        
-        }        
+        }
         //Triangulo inferior sin diagonal y cambiado de signo
         nrow=0;
         for (ArrayList<Integer> row : A){
@@ -233,8 +233,8 @@ abstract public class SystemEquations {
     public static boolean isDebug() {
         return debug;
     }
-    public static void setDebug(boolean debug) {
-        SystemEquations.debug = debug;
+    public static void setDebug(boolean debugx) {
+        debug = debugx;
     }
        
 }

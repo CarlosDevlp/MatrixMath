@@ -32,7 +32,7 @@ abstract public class MatrixOperations {
        return matrix;
     }
     //Función para multiplicar matrices
-    //M1(mxn)*M2(nxp)=R(mxp)
+    //M1(mxn)*M2(nxp)=R(mxp)     
     public static ArrayList< ArrayList<Double> > multiply(ArrayList< ArrayList<Double> > matrixOne,ArrayList< ArrayList<Double> > matrixTwo) throws Exception{ 
         if(matrixOne.get(0).size()!=matrixTwo.size())
             throw new Exception("Para multiplicar matrices, el número de columnas de la primera matriz debe ser igual al de filas de la segunda matriz.");
@@ -58,13 +58,15 @@ abstract public class MatrixOperations {
     }
     //Función para sumar matrices
     //M1(mxn)+M2(mxn)=R(mxn)
-    public static ArrayList< ArrayList<Double> > plus(ArrayList< ArrayList<Double> > matrixOne,ArrayList< ArrayList<Double> > matrixTwo) throws Exception{
-        if(matrixOne.size()==matrixTwo.size() && matrixOne.get(0).size()==matrixTwo.get(0).size())
+    public static ArrayList< ArrayList<Integer> > plus(ArrayList< ArrayList<Integer> > matrixOne,ArrayList< ArrayList<Integer> > matrixTwo) throws Exception{        
+        if(matrixOne.size()!=matrixTwo.size() ||  matrixOne.get(0).size()!=matrixTwo.get(0).size())
            throw new Exception("En la suma de matrices, ambas matrices deben tener la misma dimensión");       
-        ArrayList< ArrayList<Double> > result=matrixOne;
-            for(int row=0;row<matrixTwo.size();row++)
+        ArrayList< ArrayList<Integer> > result=new ArrayList();
+            for(int row=0;row<matrixTwo.size();row++){
+                result.add(new ArrayList<Integer>());
                 for(int col=0;col<matrixTwo.get(0).size();col++)
-                    result.get(row).set(col, matrixOne.get(row).get(col) +  matrixTwo.get(row).get(col) );            
+                    result.get(row).add( matrixOne.get(row).get(col) +  matrixTwo.get(row).get(col) );        
+            }
         return result;
     }
     

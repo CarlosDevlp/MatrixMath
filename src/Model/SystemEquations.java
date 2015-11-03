@@ -11,7 +11,8 @@ import java.util.ArrayList;
  */
 abstract public class SystemEquations {
        private static boolean debug=false;
-       private static DecimalFormat df = new DecimalFormat("#.####");
+       private static String debugStr="";//guarda el último debug
+       private static DecimalFormat df = new DecimalFormat("#.####");       
        public static abstract class Iterations{//alternativa a enum
            public static final int DEPENDSOFERROR=-1,ONCE=1,TWICE=2;           
        };
@@ -98,11 +99,11 @@ abstract public class SystemEquations {
          double err,n=0,minErr=100;
        //seria los valores previos del resultado
          ArrayList< ArrayList<Double> > prevResult=new ArrayList();
-        String debugStr;
+        String debugStr2;
+        SystemEquations.debugStr="";
         //calcular soluciones mediante iteraciones
-        if(debug)//debug
-            System.out.println("---Sistema de ecuaciones por Jacobi---\n");
-                   
+        if(debug)//debug            
+            SystemEquations.debugStr+="\n---Sistema de ecuaciones por Jacobi---\n";
             //inicializar la matriz de resultados previos
             for(int i=0; i<ndim; i++){
                 prevResult.add(new ArrayList());
@@ -113,12 +114,12 @@ abstract public class SystemEquations {
               if(iterations!=-1 && i>(iterations-1))
                      break;
               ULXinvD=MatrixOperations.multiply(ULinvD,result);
-              debugStr="";
+              debugStr2="";
                 for(int row=0;row<ndim;row++){
                     result.get(row).set(0,BinvD.get(row).get(0)+ULXinvD.get(row).get(0));
                     err=Math.abs( (result.get(row).get(0)-prevResult.get(row).get(0)) / result.get(row).get(0) )*100;
                     if(debug)//debug
-                        debugStr+="\tA"+row+":\t"+df.format(result.get(row).get(0))+"\tA"+row+"ε:\t"+df.format(err);
+                        debugStr2+="\tA"+row+":\t"+df.format(result.get(row).get(0))+"\tA"+row+"ε:\t"+df.format(err);
                     if(minErr>err)
                         minErr=err;
                 }
@@ -128,8 +129,10 @@ abstract public class SystemEquations {
                   prevResult.get(j).set(0,result.get(j).get(0));
               i++;
               if(debug)//debug
-                    System.out.println("Iteración("+i+"): "+debugStr);
+                    SystemEquations.debugStr+="\nIteración("+i+"): "+debugStr2;
             }while(minErr>0.5);                   
+         //debug
+         System.out.println(SystemEquations.debugStr);
        return result;
     }
        
@@ -199,22 +202,23 @@ abstract public class SystemEquations {
                     prevResult.get(i).add(0.0);
                 }
         //comenzando a calcular las soluciones mediante iteración
+                SystemEquations.debugStr="";
             if(debug)//debug
-                System.out.println("---Sistema de ecuaciones por Gauss Seidel---\n");
+                SystemEquations.debugStr+="\n---Sistema de ecuaciones por Gauss Seidel---\n";
                           
                 int i=0;
-                String debugStr;
+                String debugStr2;
                 do{//repetir hasta que el error sea menor que 0.5
                   
                     if(iterations!=-1 && i>(iterations-1))
                       break;
-                  debugStr="";
+                  debugStr2="";
                   PXinvN=MatrixOperations.multiply(PinvN,result);
                     for(int row=0;row<ndim;row++){
                         result.get(row).set(0,BinvN.get(row).get(0)+PXinvN.get(row).get(0));
                         err=Math.abs( (result.get(row).get(0)-prevResult.get(row).get(0)) / result.get(row).get(0) )*100;
                          if(debug)//debug
-                            debugStr+="\tA"+row+":\t"+df.format(result.get(row).get(0))+"\tA"+row+"ε:\t"+df.format(err);
+                            debugStr2+="\tA"+row+":\t"+df.format(result.get(row).get(0))+"\tA"+row+"ε:\t"+df.format(err);
                         if(minErr>err)
                             minErr=err;
                     }                                      
@@ -224,9 +228,9 @@ abstract public class SystemEquations {
                   
                   i++;
                   if(debug)//debug
-                    System.out.println("Iteración("+i+"): "+debugStr);
+                    SystemEquations.debugStr+="\nIteración("+i+"): "+debugStr2;
                 }while(minErr>0.5); 
-        
+        System.out.println(SystemEquations.debugStr);
         return result;
     }
     //getters and setters
@@ -236,5 +240,11 @@ abstract public class SystemEquations {
     public static void setDebug(boolean debugx) {
         debug = debugx;
     }
-       
+    public static String getDebugStr() {
+        return debugStr;
+    }
+    public static void setDebugStr(String debugStr) {
+        SystemEquations.debugStr = debugStr;
+    }
+    
 }

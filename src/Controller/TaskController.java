@@ -5,6 +5,9 @@ package Controller;
 
 import java.util.*;
 import Model.*;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -13,7 +16,10 @@ import javax.swing.table.TableModel;
  * @author carlos
  */
 public class TaskController {
-     private String [][]matrixFunctionsList;
+     private String [][]matrixFunctionsList;     
+     private JTextArea recommenderPointer;
+     private JTextField iterationsFieldPointer;
+     private JLabel iterationsLabelPointer;
      private ArrayList<  Matrix > matrixList;
      private Vector<String> matrixNamesList;
      //constructor
@@ -33,10 +39,12 @@ public class TaskController {
          SystemEquations.setDebug(true);
      }
     //parser
-    public ArrayList< ArrayList<Integer> > tableToArray(TableModel table){
+    public ArrayList< ArrayList<Integer> > tableToArray(TableModel table) throws Exception{
         ArrayList< ArrayList<Integer> > temp=new ArrayList();
         ArrayList<Integer> aux;
         DefaultTableModel dtm = (DefaultTableModel)table;
+        
+        
         int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount(),num;
         
         for (int i = 0 ; i < nRow ; i++){                        
@@ -49,16 +57,26 @@ public class TaskController {
                 }catch(Exception err){break;}
             
             
-                if(!aux.isEmpty())
-                    temp.add(aux);            
+                if(!aux.isEmpty()){
+                    temp.add(aux);                     
+                }
         }
+        if(temp.isEmpty())
+            throw new Exception("La matriz está vacía");
         return temp;
-    }
+    }    
     public Object[][] arrayToTable(ArrayList< ArrayList<Integer> > array){
         Object[][] temp=new Object[array.size()][array.get(0).size()]; 
         for(int row=0;row<array.size();row++)
             for(int col=0;col<array.get(0).size();col++)
              temp[row][col]=array.get(row).get(col);        
+        return temp;
+    }
+    public Object[][] arrayToTableFixed(ArrayList< ArrayList<Integer> > array,int ncols,int nrows){
+        Object[][] temp=new Object[nrows][ncols];        
+        for(int row=0;row<nrows;row++)
+            for(int col=0;col<ncols;col++)                
+                   temp[row][col]=((row<array.size() && col<array.get(0).size())?array.get(row).get(col):"");
         return temp;
     }
     
@@ -104,16 +122,19 @@ public class TaskController {
                 if(matrixList.size()<1)
                      throw new Exception("Deben haber 1 matriz para poder hallar la inversa");
                 aux1=MatrixTypes.inverse(matrixList.get(0).getValues());
+                recommenderPointer.append(MatrixTypes.getDebugStr());
                 break;
             case 4://Sist.Ec.Jacobi
                 if(matrixList.size()<2)
-                     throw new Exception("Deben haber 2 matrices para poder resolver un sistema de ecuaciones");
-                aux1=SystemEquations.Jacobi(matrixList.get(0).getValues(), matrixList.get(1).getValues(), SystemEquations.Iterations.DEPENDSOFERROR);
+                     throw new Exception("Deben haber 2 matrices para poder resolver un sistema de ecuaciones");               
+                    aux1=SystemEquations.Jacobi(matrixList.get(0).getValues(), matrixList.get(1).getValues(),((this.iterationsFieldPointer.getText().compareTo("")!=0) ? Integer.parseInt(this.iterationsFieldPointer.getText()) : SystemEquations.Iterations.DEPENDSOFERROR));
+                recommenderPointer.append(SystemEquations.getDebugStr());
                 break;
             case 5://Sist.Ec.Gauss Seidel
                 if(matrixList.size()<2)
                      throw new Exception("Deben haber 2 matrices para poder resolver un sistema de ecuaciones");
-                aux1=SystemEquations.GaussSeidel(matrixList.get(0).getValues(), matrixList.get(1).getValues(), SystemEquations.Iterations.DEPENDSOFERROR);
+                aux1=SystemEquations.GaussSeidel(matrixList.get(0).getValues(), matrixList.get(1).getValues(), ((this.iterationsFieldPointer.getText().compareTo("")!=0) ? Integer.parseInt(this.iterationsFieldPointer.getText()) : SystemEquations.Iterations.DEPENDSOFERROR));
+                recommenderPointer.append(SystemEquations.getDebugStr());
                 break;
         }
        
@@ -165,6 +186,30 @@ public class TaskController {
     }
     public void setMatrixNamesList(Vector<String> matrixNamesList) {
         this.matrixNamesList = matrixNamesList;
+    }
+
+    public  JTextArea getRecommenderPointer() {
+        return recommenderPointer;
+    }
+
+    public void setRecommenderPointer(JTextArea recommenderPointer) {
+        this.recommenderPointer = recommenderPointer;
+    }
+
+    public JTextField getIterationsFieldPointer() {
+        return iterationsFieldPointer;
+    }
+
+    public void setIterationsFieldPointer(JTextField iterationsFieldPointer) {
+        this.iterationsFieldPointer = iterationsFieldPointer;
+    }
+
+    public JLabel getIterationsLabelPointer() {
+        return iterationsLabelPointer;
+    }
+
+    public void setIterationsLabelPointer(JLabel iterationsLabelPointer) {
+        this.iterationsLabelPointer = iterationsLabelPointer;
     }
     
     //add

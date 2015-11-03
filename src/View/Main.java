@@ -1,18 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Desarrollador Carlos Chavez Laguna.
  */
 package View;
 
 import Controller.TaskController;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,29 +15,32 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Main extends javax.swing.JFrame {
     //mis atributos
-    TaskController task=new TaskController();
+    TaskController task;
     //mis funciones
      //inicial
     public void init(){
-     //inicializar tablas        
-        
-        
+     //conexion con el controlador  
+        task=new TaskController();
+        task.setRecommenderPointer(this.txtRecommender);
+        task.setIterationsFieldPointer(this.txtIterations);
+        task.setIterationsLabelPointer(this.lblIterations);
+     //inicializar tablas                        
         clearTable(this.tbMatrixVariable);
         clearTable(this.tbMatrixResult);
         
-        this.txtRecommender.append("*Bienvenidos a Matrix Math***!!!\nAgrege una matriz y comencemos...");
+        this.txtRecommender.append("*Bienvenidos a Matrix Math***!!!\nAgrege una matriz y comencemos...\n");
      //inicializar combo Box        
         for(String str : this.task.getMatrixFunctionsList())
             this.cmbMatrixFunction.addItem(str);
         
-     DefaultListModel model  = new DefaultListModel(); 
-              
+     DefaultListModel model  = new DefaultListModel();
      this.lstMatrix.setModel(model);
+     
     }
     //limpiar tabla    
     public void clearTable(JTable table){
-        String [][]temp=new String[4][4];
-        DefaultTableModel model = new DefaultTableModel(temp,new String[]{"X1","X2","X3","X4"});
+        String [][]temp=new String[5][5];
+        DefaultTableModel model = new DefaultTableModel(temp,new String[]{"X1","X2","X3","X4","X5"});
         table.setModel(model);
     }
     //obtener los datos de la tabla
@@ -97,6 +93,9 @@ public class Main extends javax.swing.JFrame {
         txtRecommender = new javax.swing.JTextArea();
         btnDeleteMatrix = new javax.swing.JButton();
         btnDeleteAll = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        lblIterations = new javax.swing.JLabel();
+        txtIterations = new javax.swing.JFormattedTextField();
 
         tbMatrixVariable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -207,18 +206,31 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnClear.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnClear.setText("Limpiar Matriz");
+        btnClear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnClearMouseClicked(evt);
+            }
+        });
+
+        lblIterations.setText("Iteraciones:");
+
+        txtIterations.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+
         javax.swing.GroupLayout pnlLayout = new javax.swing.GroupLayout(pnl);
         pnl.setLayout(pnlLayout);
         pnlLayout.setHorizontalGroup(
             pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlLayout.createSequentialGroup()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlLayout.createSequentialGroup()
+                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlLayout.createSequentialGroup()
                         .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(pnlLayout.createSequentialGroup()
                                 .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblTableResult, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,25 +241,34 @@ public class Main extends javax.swing.JFrame {
                                         .addComponent(txtMatrixVariableName, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btnAddMatrix)))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblTableVariable, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
-                                .addComponent(btnCalcular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbMatrixFunction, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(483, 483, 483))
+                    .addGroup(pnlLayout.createSequentialGroup()
+                        .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlLayout.createSequentialGroup()
-                                .addGap(8, 8, 8)
+                                .addGap(6, 6, 6)
+                                .addComponent(btnClear)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnDeleteAll, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnDeleteMatrix, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(285, 285, 285))))
+                                    .addComponent(lblTableVariable, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlLayout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                            .addComponent(btnDeleteMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                                            .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(pnlLayout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblIterations)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtIterations, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnCalcular, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlLayout.createSequentialGroup()
+                                            .addGap(12, 12, 12)
+                                            .addComponent(cmbMatrixFunction, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(311, 311, 311))))
         );
         pnlLayout.setVerticalGroup(
             pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,26 +283,34 @@ public class Main extends javax.swing.JFrame {
                                 .addComponent(txtMatrixVariableName, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(btnAddMatrix, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addGap(18, 18, 18)
-                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlLayout.createSequentialGroup()
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteMatrix)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteAll)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(btnDeleteMatrix))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDeleteAll)
+                    .addComponent(btnClear))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTableResult, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addComponent(cmbMatrixFunction, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblIterations)
+                            .addComponent(txtIterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCalcular, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCalcular, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -310,7 +339,7 @@ public class Main extends javax.swing.JFrame {
             DefaultListModel model = (DefaultListModel) this.lstMatrix.getModel();
             model.removeAllElements();
             this.lstMatrix.setModel(model);
-            this.txtRecommender.setText("La lista de matrices está vacía");
+            this.txtRecommender.append("\nLa lista de matrices está vacía");
 
     }//GEN-LAST:event_btnDeleteAllMouseClicked
     //eliminar matriz seleccionada
@@ -323,22 +352,29 @@ public class Main extends javax.swing.JFrame {
             this.lstMatrix.setModel(model);
             
         }else
-            this.txtRecommender.setText("Seleccione una matriz antes de eliminar");
+            this.txtRecommender.append("\nSeleccione una matriz antes de eliminar");
+            this.txtRecommender.setCaretPosition(this.txtRecommender.getDocument().getLength());
     }//GEN-LAST:event_btnDeleteMatrixMouseClicked
 
    //Escribir recomendaciones acerca del la operación escogida
     private void cmbMatrixFunctionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbMatrixFunctionItemStateChanged
-        this.txtRecommender.setText(" "+task.getMatrixFunctionSuggestion(this.cmbMatrixFunction.getSelectedIndex()));
+         this.lblIterations.setVisible(false);
+         this.txtIterations.setVisible(false);
+        if(evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED){
+            this.txtRecommender.append("\n"+task.getMatrixFunctionSuggestion(this.cmbMatrixFunction.getSelectedIndex()));
+            if(this.lstMatrix.getSelectedIndex()==4 || this.lstMatrix.getSelectedIndex()==5){
+                this.lblIterations.setVisible(true);
+                this.txtIterations.setVisible(true);
+            }
+        }
     }//GEN-LAST:event_cmbMatrixFunctionItemStateChanged
 
     private void btnCalcularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalcularMouseClicked
         
-        try{
-              
-              
+        try{                            
               DefaultTableModel model=new DefaultTableModel(
                       task.doTask(this.cmbMatrixFunction.getSelectedIndex())
-                      ,new String[]{"X1","X2","X3","X4"});
+                      ,new String[]{"X1","X2","X3","X4","X5"});
               this.tbMatrixResult.setModel(model);
           }
           catch(Exception err){
@@ -353,20 +389,28 @@ public class Main extends javax.swing.JFrame {
              DefaultListModel model  = (DefaultListModel) this.lstMatrix.getModel(); 
               model.addElement(this.txtMatrixVariableName.getText());
               this.lstMatrix.setModel(model);
-            this.txtRecommender.setText("Se ha agregado la matriz: "+this.txtMatrixVariableName.getText());
+            this.txtRecommender.append("\nSe ha agregado la matriz: "+this.txtMatrixVariableName.getText());
+            clearTable(this.tbMatrixVariable);
+            this.txtMatrixVariableName.setText("");
         }catch(Exception err){
             JOptionPane.showMessageDialog(null, err,"Error",JOptionPane.ERROR_MESSAGE);
-        } 
+        }
     }//GEN-LAST:event_btnAddMatrixMouseClicked
-
+    //Mostrar la matriz seleccionada en la tabla de variables
     private void lstMatrixMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstMatrixMouseClicked
         if(this.lstMatrix.getSelectedIndex()!=-1)
             this.tbMatrixVariable.setModel(
-                                         new DefaultTableModel(
-                                                task.arrayToTable(task.getMatrixAt(this.lstMatrix.getSelectedIndex()).getValues()), 
-                                                new String[]{"X1","X2","X3","X4"})
+                                           new DefaultTableModel(
+                                                task.arrayToTableFixed(task.getMatrixAt(this.lstMatrix.getSelectedIndex()).getValues(),5,5),
+                                                new String[]{"X1","X2","X3","X4","X5"})
                                           );
+        
+       
     }//GEN-LAST:event_lstMatrixMouseClicked
+     //limpiar matriz variable
+    private void btnClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearMouseClicked
+        clearTable(this.tbMatrixVariable);
+    }//GEN-LAST:event_btnClearMouseClicked
 
    
     /**
@@ -407,6 +451,7 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMatrix;
     private javax.swing.JButton btnCalcular;
+    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDeleteAll;
     private javax.swing.JButton btnDeleteMatrix;
     private javax.swing.JComboBox cmbMatrixFunction;
@@ -415,6 +460,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JLabel lblIterations;
     private javax.swing.JLabel lblTableResult;
     private javax.swing.JLabel lblTableVariable;
     private javax.swing.JLabel lblTableVariable1;
@@ -423,6 +469,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTable tbMatrixResult;
     private javax.swing.JTable tbMatrixVariable;
     private javax.swing.JTable tbMatrixVariable1;
+    private javax.swing.JFormattedTextField txtIterations;
     private javax.swing.JTextField txtMatrixVariableName;
     private javax.swing.JTextArea txtRecommender;
     // End of variables declaration//GEN-END:variables

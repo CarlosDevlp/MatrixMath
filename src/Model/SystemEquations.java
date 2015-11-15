@@ -12,7 +12,7 @@ import java.util.ArrayList;
 abstract public class SystemEquations {
        private static boolean debug=false;
        private static String debugStr="";//guarda el último debug
-       private static DecimalFormat df = new DecimalFormat("#.####");       
+       private static DecimalFormat df = new DecimalFormat("#.####");
        public static abstract class Iterations{//alternativa a enum
            public static final int DEPENDSOFERROR=-1,ONCE=1,TWICE=2;           
        };

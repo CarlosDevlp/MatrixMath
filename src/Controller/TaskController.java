@@ -22,6 +22,7 @@ public class TaskController {
      private JLabel iterationsLabelPointer;
      private ArrayList<  Matrix > matrixList;
      private Vector<String> matrixNamesList;
+     
      //constructor
      public TaskController(){         
          this.matrixFunctionsList= new String[][]{
@@ -223,7 +224,22 @@ public class TaskController {
             throw new Exception("La matriz agregada a sido inválida");
         }
     }
-     
-     
+    //Criptology
+    public String OwnEncriptor(String input,String key,String opt) throws Exception{
+        String result="";
+        if("".equals(input.trim()) || "".equals(key.trim()))
+            throw new Exception("Uno (o ambos) de los campos ingresados está vacío");
+        
+        switch(opt){
+            case "Encrypt":
+                result=OwnCryptoSystem.encrypt(input, key);
+                break;
+            case "Decrypt":
+                result=OwnCryptoSystem.decrypt(input, key);
+                break;
+        }
+        
+        return result;
+    }    
 }
 

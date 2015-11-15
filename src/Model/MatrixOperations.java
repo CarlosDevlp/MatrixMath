@@ -46,7 +46,7 @@ abstract public class MatrixOperations {
             for(int i=0;i<m;i++){//filas de la 1era matriz
                 result.add(new ArrayList());//nueva fila para la matriz resultante
                 for(int j=0;j<p;j++){//columnas de la 2da matriz
-                    sum=0.0;                    
+                    sum=0.0;
                     //multiplicación
                     for(int k=0;k<n;k++)
                         sum+=matrixOne.get(i).get(k)*matrixTwo.get(k).get(j);

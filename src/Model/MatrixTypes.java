@@ -20,7 +20,8 @@ abstract public class MatrixTypes {
         ArrayList< ArrayList<Integer> > adj=new ArrayList(),trans=new ArrayList(),subMatrix;
         int det, ndim=matrix.size();
         det=MatrixDeterminant.laplace(matrix);
-                
+        if(det==0)
+            throw new Exception("La matriz no tiene inversa");
         //transpuesta
         for(int row=0;row<ndim;row++){
             trans.add(new ArrayList<Integer>());

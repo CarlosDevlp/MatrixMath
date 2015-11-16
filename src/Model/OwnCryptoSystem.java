@@ -4,6 +4,7 @@
  */
 package Model;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
@@ -12,9 +13,10 @@ import java.util.ArrayList;
  * @author carlos
  */
 abstract public class OwnCryptoSystem {
-    private static boolean debug=false;
-    private static String debugStr="";
-    private static Integer rounds=2;
+    public static boolean debug=false;
+    public static String debugStr="";
+    private static Integer rounds=7;
+    
     //Encriptar
     public static String encrypt(String plainText,String key) throws Exception{
         //evaluar la llave
@@ -31,7 +33,7 @@ abstract public class OwnCryptoSystem {
                 c= Matrix.parseToIntegerMatrix(MatrixOperations.multiply(c.getValuesInDoubleType(), k.getValuesInDoubleType()), "cipher-text");
         ArrayList<ArrayList<String>> temp=c.getValuesInStrHex(); 
         
-        String aux="";
+        String aux;
         System.out.println(c.getValuesInStrHex());
         for(ArrayList<String> row: temp)
             for(String col: row){
@@ -42,6 +44,7 @@ abstract public class OwnCryptoSystem {
             }
         return cipherText;
     }
+    
     
     //Desencriptar
     public static String decrypt(String cipherText,String key) throws Exception{
@@ -64,6 +67,80 @@ abstract public class OwnCryptoSystem {
         return plainText;
     }
     
+    //números grandes
+      //Encriptar
+        public static String bigEncrypt(String plainText,String key) throws Exception{
+            //evaluar la llave
+            String cipherText=""; debugStr="";      
+            Matrix.debug=true;
+
+            Matrix<BigInteger> m= Matrix.parseToBigIntegerMatrixFixed(plainText, "plain-text",16,4), 
+                               k= Matrix.parseToBigIntegerMatrixFixed(key, "key",16,4);
+            //verificar la valides de la llave
+                if(MatrixDeterminant.bigLaplace(k.getValues()).equals(BigInteger.ZERO))
+                    throw new Exception("La llave privada carece de inversa");
+                
+            
+            //comenzando a encriptar
+            Matrix<BigInteger> c=m;
+                //rondas
+                for(int i=1;i<=rounds;i++){                    
+                    if(debug) debugStr+=(new Matrix("c-hex",c.getValuesInStrBigHex())).asOneElement()+"\t"+i+"\n";
+                    c= Matrix.parseToBigIntegerMatrix(
+                            MatrixOperations.BigMultiply(c.getValuesInBigDecimalType(), k.getValuesInBigDecimalType()),
+                            "cipher-text");
+                }
+            //función xor final
+            ArrayList<ArrayList<String>> temp=bigXOR(c.getValues(),k.getValues()).getValuesInStrBigHex(); 
+            
+            //creación del texto cifrado final a mostrar
+            String aux;            
+            System.out.println(c.getValuesInStrBigHex());
+            for(ArrayList<String> row: temp)
+                for(String col: row){
+                    aux="";
+                    for(int i=0;i<(rounds*4)-col.length();i++)                    
+                            aux+="0";
+                    cipherText+=aux+col;
+                }
+            return cipherText;
+       }
+      //Desencriptar
+         public static String bigDecrypt(String cipherText,String key) throws Exception{
+            String plainText=""; debugStr="";
+            Matrix.debug=true;
+            Matrix<BigInteger> c= Matrix.parseToBigIntegerMatrixFixedFromStrHex(cipherText, "plain-text",64*rounds,16*rounds,4*rounds);
+            Matrix<Integer>    k= Matrix.parseToIntegerMatrixFixed(key, "key",16,4);
+            
+            Matrix<BigDecimal> invK=(new Matrix<Double>("k-inverse",MatrixTypes.inverse(k.getValues()))).getValuesAsBigDecimalMatrix();
+            Matrix<BigInteger> m= c;
+            
+            for(int i=1;i<=rounds;i++){
+                    if(debug) debugStr+=(new Matrix("c-hex",c.getValuesInStrBigHex())).asOneElement()+"\t"+i+"\n";
+                    m= Matrix.parseToBigIntegerMatrix(MatrixOperations.BigMultiply( m.getValuesInBigDecimalType(), invK.getValues()), "cipher-text");
+            }
+            
+            if(debug)
+                System.out.println(m.getValues());
+            
+            //creación del texto plano original
+            for(ArrayList<BigInteger> row: m.getValues())
+                for(BigInteger col: row)
+                    plainText+=((char)(col.intValue()));
+            
+            return plainText;
+        }
+        public static Matrix<BigInteger> bigXOR(ArrayList<ArrayList<BigInteger>> a,ArrayList<ArrayList<BigInteger>> b){
+            int nrows=a.size(),ncols=a.get(0).size();
+            ArrayList<ArrayList<BigInteger>> c=new ArrayList();
+            for(int row=0;row<nrows;row++){
+                c.add(new ArrayList<BigInteger>());
+                for(int col=0;col<ncols;col++)                    
+                    c.get(row).add(a.get(row).get(col).xor(b.get(row).get(col)));
+                   //b.get(row).get(col) BigInteger.valueOf(255L)
+            }
+            return new Matrix("",c);
+        }
 }
 
 /*

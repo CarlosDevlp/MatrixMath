@@ -3,6 +3,9 @@
  */
 package Model;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.ArrayList;
 
 /**
@@ -56,6 +59,33 @@ abstract public class MatrixOperations {
             }                                             
         return result;
     }
+    //para enteros gigantes
+    public static ArrayList< ArrayList<BigDecimal> > BigMultiply(ArrayList< ArrayList<BigDecimal> > matrixOne,ArrayList< ArrayList<BigDecimal> > matrixTwo) throws Exception{ 
+        if(matrixOne.get(0).size()!=matrixTwo.size())
+            throw new Exception("Para multiplicar matrices, el número de columnas de la primera matriz debe ser igual al de filas de la segunda matriz.");
+
+        ArrayList< ArrayList<BigDecimal> > result=new ArrayList();
+
+        int n=matrixTwo.size();//número de columnas de ambas matrices
+        int m=matrixOne.size(),p=matrixTwo.get(0).size();
+
+        //multiplicando las matrices        
+        BigDecimal sum;
+            for(int i=0;i<m;i++){//filas de la 1era matriz
+                result.add(new ArrayList());//nueva fila para la matriz resultante
+                for(int j=0;j<p;j++){//columnas de la 2da matriz
+                    sum= new BigDecimal(0.0);
+                    //multiplicación
+                    for(int k=0;k<n;k++)
+                        sum=sum.add(
+                                matrixOne.get(i).get(k).multiply(matrixTwo.get(k).get(j))
+                                );
+                    
+                  result.get(i).add(sum);//nueva columna para la matriz resultante
+                }
+            }                                             
+        return result;
+}
     //Función para sumar matrices
     //M1(mxn)+M2(mxn)=R(mxn)
     public static ArrayList< ArrayList<Integer> > plus(ArrayList< ArrayList<Integer> > matrixOne,ArrayList< ArrayList<Integer> > matrixTwo) throws Exception{        

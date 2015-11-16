@@ -7,6 +7,8 @@ package View;
 
 import Controller.TaskController;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,7 +20,12 @@ public class EncryptorView extends javax.swing.JFrame {
     //mis funciones
     private void init(){
         task=new TaskController();
-    } 
+    }
+    public void setTable(Object[][] values){        
+        DefaultTableModel model = new DefaultTableModel(values,new String[]{"Cn","Index"});
+        this.tbRounds.setModel(model);
+    }
+    
     /**
      * Creates new form EncryptorView
      */
@@ -67,26 +74,26 @@ public class EncryptorView extends javax.swing.JFrame {
 
         tbRounds.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Cn", "Kn", "index"
+                "Cn", "index"
             }
         ));
         tbRounds.setEnabled(false);
@@ -171,9 +178,9 @@ public class EncryptorView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblKey1)
-                            .addComponent(cmbMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblKey1))
                         .addGap(18, 18, 18)
                         .addComponent(lblRounds)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
@@ -211,6 +218,9 @@ public class EncryptorView extends javax.swing.JFrame {
             String result= task.OwnEncriptor(this.txtInput.getText(), this.txtKey.getText(), this.cmbMode.getSelectedItem()+"");
             this.txtResult.setText(result);
             this.txtInput.setText("");
+                        
+            setTable(this.task.debugToTable());
+            
         }catch(Exception err){
             JOptionPane.showMessageDialog(null,err,"Error:",JOptionPane.ERROR_MESSAGE);               
         }

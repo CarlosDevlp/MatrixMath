@@ -5,6 +5,8 @@
  */
 package Model;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 /**
@@ -94,6 +96,7 @@ public class Matrix <T>{
         }
         return new Matrix(name,temp);
     }    
+    
     public static Matrix<Integer> parseToIntegerMatrixFixed(String str,String name,int nrows,int ncols){
         
         char []chrs=str.toCharArray();
@@ -134,7 +137,90 @@ public class Matrix <T>{
             System.out.println("\n"+temp.toString());        
         return new Matrix(name,temp);        
     }
-    
+    //Números grandes      
+        //parseadores
+        public static Matrix<BigInteger> parseToBigIntegerMatrixFixed(String str,String name,int nrows,int ncols){
+
+            char []chrs=str.toCharArray();
+            ArrayList<ArrayList<BigInteger>> temp=new ArrayList();
+
+            temp.add(new ArrayList<BigInteger>());
+            for(int i=0;i<nrows;i++){
+                if(i>=ncols && i%ncols==0)
+                    temp.add(new ArrayList<BigInteger>());            
+                temp.get(temp.size()-1).add( ((i<chrs.length)?new BigInteger( ((int)chrs[i])+"") : BigInteger.ZERO ) );
+            }        
+            if(debug)
+             System.out.println(temp.toString());
+            return new Matrix(name,temp);        
+        }
+        public static Matrix<BigInteger> parseToBigIntegerMatrix(ArrayList<ArrayList<BigDecimal>> list,String name){
+            ArrayList<ArrayList<BigInteger>> temp=new ArrayList();        
+            for(ArrayList<BigDecimal> row:list){
+                temp.add(new ArrayList<BigInteger>());
+                for(BigDecimal col:row) 
+                    temp.get(temp.size()-1).add( round(col) );
+
+            }
+            return new Matrix(name,temp);
+        }
+        public static Matrix<BigInteger> parseToBigIntegerMatrixFixedFromStrHex(String list,String name,int nrows,int ncols,int jump){
+           char []chrs=list.toCharArray();
+           String aux="";
+           ArrayList<ArrayList<BigInteger>> temp=new ArrayList();
+                   temp.add(new ArrayList<BigInteger>());
+           for(int i=0;i<nrows;i+=jump){
+               if(i>=ncols && i%ncols==0){
+                   temp.add(new ArrayList<BigInteger>());
+                   System.out.print(aux);
+               }
+               if(i<chrs.length){ 
+                   aux="";
+                   for(int ii=0;ii<jump;ii++)
+                      aux+=chrs[i+ii];
+                   temp.get(temp.size()-1).add( new BigInteger(aux,16) );
+                   //System.out.print(aux);
+               }else
+                   temp.get(temp.size()-1).add( BigInteger.ZERO );
+            }
+           if(debug)
+               System.out.println("\n"+temp.toString());        
+           return new Matrix(name,temp);        
+       }
+       public ArrayList<ArrayList<String>> getValuesInStrBigHex(){
+            ArrayList<ArrayList<String>> temp=new ArrayList();
+            for(ArrayList<T> row: values){
+                temp.add(new ArrayList());
+                for(T col: row)
+                    temp.get(temp.size()-1).add( (new BigInteger(col.toString())).toString(16) );
+            }
+            return temp;
+        }
+        public ArrayList<ArrayList<BigDecimal>> getValuesInBigDecimalType() {
+           ArrayList<ArrayList<BigDecimal>> temp=new ArrayList();
+           for(ArrayList<T> row: values){
+               temp.add(new ArrayList());
+               for(T col: row)
+                   temp.get(temp.size()-1).add(new BigDecimal(col.toString()));
+           }
+           return temp;
+        }
+        
+        public Matrix<BigDecimal> getValuesAsBigDecimalMatrix() {           
+           return this.getValuesAsBigDecimalMatrix(this.name);
+        }
+        
+        public Matrix<BigDecimal> getValuesAsBigDecimalMatrix(String name) {
+           ArrayList<ArrayList<BigDecimal>> temp=new ArrayList();
+           for(ArrayList<T> row: values){
+               temp.add(new ArrayList());
+               for(T col: row)
+                   temp.get(temp.size()-1).add(new BigDecimal(col.toString()));
+           }
+           return new Matrix(name,temp);
+        }
+        
+       
     //función de redondeo
     private static int round(double d){
         double dAbs = Math.abs(d);
@@ -146,4 +232,24 @@ public class Matrix <T>{
             return d<0 ? -(i+1) : i+1;          
         }
     }
+    
+    private static BigInteger round(BigDecimal d){        
+        BigInteger i = d.toBigInteger();
+        BigDecimal result = d.subtract(new BigDecimal(i) );
+        if(result.compareTo(new BigDecimal("0.5"))<0){
+            return i;
+        }else{
+            return i.add(BigInteger.ONE);  
+        }
+    }
+    //as
+     //crear un solo elemento con todos los elementos
+    public String asOneElement(){
+        String str="";
+        for(ArrayList<T> row: this.values)
+            for(T col: row)
+                str+=col;        
+        return str;
+    }
+    
 }

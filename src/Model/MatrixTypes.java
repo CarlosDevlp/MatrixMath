@@ -5,6 +5,8 @@
  */
 package Model;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 /**
@@ -82,6 +84,83 @@ abstract public class MatrixTypes {
         
        return inv;
     }
+//Función para hallar la inversa de una matriz
+    public static ArrayList< ArrayList<BigDecimal> >  bigInverse(ArrayList< ArrayList<BigInteger> > matrix) throws Exception{
+        ArrayList< ArrayList<BigDecimal> >  inv=new ArrayList();
+        ArrayList< ArrayList<BigInteger> > adj=new ArrayList();
+        ArrayList< ArrayList<BigInteger> > trans=new ArrayList(),subMatrix;
+        BigInteger det;
+        int ndim=matrix.size();
+        det=MatrixDeterminant.bigLaplace(matrix);
+        
+        if(det.equals(0))
+            throw new Exception("La matriz no tiene inversa");
+        //transpuesta
+        for(int row=0;row<ndim;row++){
+            trans.add(new ArrayList<BigInteger>());
+            for(int col=0;col<ndim;col++)
+                trans.get(row).add(matrix.get(col).get(row));
+        }
+        
+        //adjunta e inversa
+        BigDecimal adjElement;
+        BigDecimal detInv=new BigDecimal( BigInteger.ONE.divide(det) ); //adjElement: elemento que se obtuvo de una determinante, para la adjunta. detInv: la inversa de la determinante
+        
+        if(ndim==2)
+              for(int row=0;row<ndim;row++){
+                //agregar fila a ajdunta
+                adj.add(new ArrayList<BigInteger>());
+                //agregar fila a inversa
+                inv.add(new ArrayList<BigDecimal>());                
+                for(int col=0;col<ndim;col++){                    
+                    adjElement=new BigDecimal((row==col)?
+                                     matrix.get(1-row).get(1-col).multiply(BigInteger.valueOf(1L)):
+                                     matrix.get(row).get(col).multiply(BigInteger.valueOf(-1L))
+                               );
+                    adj.get(adj.size()-1).add(adjElement.toBigInteger());
+                    inv.get(adj.size()-1).add(detInv.multiply(adjElement));
+                }
+            }
+        else
+            for(int row=0;row<ndim;row++){
+                //agregar fila a ajdunta
+                adj.add(new ArrayList<BigInteger>());
+                //agregar fila a inversa
+                inv.add(new ArrayList<BigDecimal>());
+                for(int col=0;col<ndim;col++){
+                    //generar submatriz para hallar su determinante
+                    subMatrix=new ArrayList();
+                    for(int srow=0;srow<ndim;srow++){
+                        if(srow!=row){                        
+                        subMatrix.add(new ArrayList<BigInteger>());
+                            for(int scol=0;scol<ndim;scol++)
+                                if(scol!=col)
+                                    subMatrix.get(subMatrix.size()-1).add(trans.get(srow).get(scol));
+                        }
+                    }
+                     adjElement=new BigDecimal(MatrixDeterminant.bigLaplace(subMatrix)).multiply(new BigDecimal( Math.pow(-1,row+col+2)+"" ) );                                
+
+                    //agregar columna a adjunta
+                     adj.get(row).add(adjElement.toBigInteger()); //matriz adjunta
+                    //agregar columna a inversa
+                     inv.get(row).add(detInv.multiply(adjElement)); //matriz inversa
+
+                }
+            }
+        
+        //debug        
+        if(debug){
+            MatrixTypes.debugStr="";
+            MatrixTypes.debugStr+=("\n---Inversa de la matriz---\n");
+            MatrixTypes.debugStr+=("\nDeterminante: "+det);
+            MatrixTypes.debugStr+=("\nTranspuesta: "+trans);
+            MatrixTypes.debugStr+=("\nAdjunta: "+adj);
+            System.out.println(MatrixTypes.debugStr);
+        }
+        
+       return inv;
+    }
+    
     //getters and setters
     public static boolean isDebug() {
         return debug;

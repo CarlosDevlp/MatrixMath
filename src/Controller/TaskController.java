@@ -22,6 +22,7 @@ public class TaskController {
      private JLabel iterationsLabelPointer;
      private ArrayList<  Matrix > matrixList;
      private Vector<String> matrixNamesList;
+     private String debugStr;
      
      //constructor
      public TaskController(){         
@@ -76,8 +77,21 @@ public class TaskController {
     public Object[][] arrayToTableFixed(ArrayList< ArrayList<Integer> > array,int ncols,int nrows){
         Object[][] temp=new Object[nrows][ncols];        
         for(int row=0;row<nrows;row++)
-            for(int col=0;col<ncols;col++)                
+            for(int col=0;col<ncols;col++)
                    temp[row][col]=((row<array.size() && col<array.get(0).size())?array.get(row).get(col):"");
+        return temp;
+    }
+    
+    public Object[][] debugToTable() throws Exception{
+
+        if("".equals(this.debugStr.trim()))
+            throw new Exception("No hay debug..");        
+        
+        String[] debugRows= this.debugStr.split("\n"); 
+        Object[][] temp=new Object[debugRows.length][];
+        
+        for(int row=0;row<debugRows.length;row++)
+                   temp[row]=debugRows[row].split("\t");
         return temp;
     }
     
@@ -160,6 +174,9 @@ public class TaskController {
     public String[] getMatrixFunctionsList() {
         return matrixFunctionsList[0];
     }
+    public String getDebugStr() {
+        return debugStr;
+    }
     //recibir recomendaciones de cada opción antes de realizar el cálculo
     public String getMatrixFunctionSuggestion(int index) {
         return matrixFunctionsList[1][index];
@@ -229,17 +246,21 @@ public class TaskController {
         String result="";
         if("".equals(input.trim()) || "".equals(key.trim()))
             throw new Exception("Uno (o ambos) de los campos ingresados está vacío");
-        
+        OwnCryptoSystem.debug=true;
         switch(opt){
             case "Encrypt":
-                result=OwnCryptoSystem.encrypt(input, key);
+                result=OwnCryptoSystem.bigEncrypt(input, key);
                 break;
             case "Decrypt":
-                result=OwnCryptoSystem.decrypt(input, key);
+                result=OwnCryptoSystem.bigDecrypt(input, key);
                 break;
         }
-        
+        debugStr=OwnCryptoSystem.debugStr;        
         return result;
-    }    
+    }
+
+    
+    
+    
 }
 
